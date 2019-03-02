@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Phonebook Library";
+}
+
+<div id="main">
+    <div class="d-flex flex-row formHeaders">
+        <div class="d-flex flex-column left-column_header">
+            <div class="form-group d-flex flex-row">
+                <div>
+                    <input type="text" v-model="newPhoneBook.name" class="form-control pbInput endInput" id="phonebookInput" aria-describedby="pbInputHelp" placeholder="Phone book name">
+                    <small id="pbInputHelp" class="form-text text-danger">{{newPhoneBook.error}}</small>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary endbtn" v-on:click="addNewPhoneBook">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column right-column_header">
+            <div class="d-flex flex-row justify-content-end">
+                
+                <div v-if="selectedPhoneBook.id !== 0" class="phonebookHeader justify-content-left">
+                    <h1>{{selectedPhoneBook.name}}</h1>
+                </div>
+                <div class="d-flex flex-row justify-content-end" style="position:relative; width:460px;">
+                    <div v-if="selectedPhoneBook.id !== 0"  id="addContact" class="collapse multi-collapse" style="position:absolute; top: 0; right:100px">
+                        <div class="d-flex">
+                            <div>
+                                <input type="text" v-model="newContact.name" class="form-control pbInput" id="contactNameInput" aria-describedby="pbContactNameHelp" placeholder="Contact name">
+                            </div>
+                            <div>
+                                <input type="text" v-model="newContact.phoneNumber" class="form-control pbInput endInput" id="contactNoInput" placeholder="Contact number">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary endbtn" v-on:click="addNewContact">Add</button>
+                            </div>
+                        </div>
+                        <div>
+                            <small id="pbContactNameHelp" class="form-text text-danger">{{newContact.error}}</small>
+                        </div>
+                    </div>
+                    <div id="searchContact" class="collapse multi-collapse show" style="position:absolute; top: 0; right:100px">
+                        <div class="d-flex">
+                            <div>
+                                <input type="text" v-model="searchContact.searchText" class="form-control pbSearch endInput" id="contactNameInput" aria-describedby="pbSearch" placeholder="Search">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary endbtn" v-on:click="search">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="selectedPhoneBook.id !== 0"  style="width:50px">
+                        <button v-on:click="showAddContact()" class="btn fas fa-plus toggler"></button>
+                    </div>
+                    <div style="width:50px">
+                        <button v-on:click="showSearchContact()" class="btn fas fa-search toggler" ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row">
+        <div class="d-flex flex-column left-column">
+            <div class="d-flex flex-row bookrow" v-for="book in library.data">
+                <div class="indexEdge">{{book.index}}</div>
+                <div>
+                    <ul class="phonebook">
+                        <li v-for="phonebook in book.phonebooks" :class="{liselected: $root.selectedPhoneBook.id === phonebook.id}" v-on:click="getPhoneBookEntries($event, phonebook.id, phonebook.name)">
+                            {{phonebook.name}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column right-column">
+            <div class="d-flex flex-row contactrow" v-for="entry in entries.data">
+                <div class="indexEdge2">
+                    {{entry.index}}
+                </div>
+                <div class="contactdetailsrow">
+                    <div v-for="contact in entry.contacts" class="resultsrow">
+                        <span class="contactLabel">Name</span><span class="contactData">{{contact.name}}</span>
+                        <span class="contactLabel">Number</span><span class="contactData">{{contact.phoneNumber}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
